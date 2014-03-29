@@ -1,0 +1,2 @@
+
+curl 'http://localhost:8080/get_init_signature?key=mykey&filename=720x480_29.97_Progressive_Photo-JPEG.mov&filesize=786745266&mime_type=video%2Fquicktime&bucket=somebucket&acl=public-read&encrypted=false' -H 'Accept-Encoding: gzip,deflate,sdch' -H 'Accept-Language: en-US,en;q=0.8,it;q=0.6' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36' -H 'Accept: */*' -H 'Referer: http://localhost:8080/' -H 'Cookie: remember_token=' -H 'Connection: keep-alive' --compressed

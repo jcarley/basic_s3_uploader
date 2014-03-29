@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Basic S3 Uploader</title>
+    <link rel="stylesheet" href="/public/stylesheets/main.css" type="text/css" />
+  </head>
+
+  <body id="index" class="home">
+
+    <header id="banner" class="body">
+      <h1><a href="#">Basic S3 Uploader</a></h1>
+    </header>
+
+    <aside id="featured" class="body">
+      <article>
+        <hgroup>
+          <h2>Select a file!</h2>
+          <input type="file" name="fileinput" id="fileinput" />
+          <br />
+          <br />
+          <button type="button" id="startUpload">Upload it</button>
+          <button type="button" id="cancelUpload">Cancel upload</button>
+          <br />
+          <br />
+          <div id="retries"></div>
+          <br />
+          <br />
+          <div id="error"></div>
+          <br />
+          <br />
+          <div id="progress-container">
+            <div id="progress-bar"></div>
+          </div>
+        </hgroup>
+      </article>
+    </aside>
+
+
+    <script type="text/javascript" src="/public/javascripts/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/public/javascripts/main.js"></script>
+    <script type="text/javascript" src="/public/javascripts/basic_s3_uploader.js"></script>
+  </body>
+</html>
