@@ -112,17 +112,19 @@ In order for BasicS3Uploader to upload to your S3 bucket, you must have the prop
 CORS config in place for that bucket. Below is a sample of what that configuration
 should look like.
 
-    <CORSRule>
-      <AllowedOrigin>[your domain]</AllowedOrigin>
-      <AllowedMethod>PUT</AllowedMethod>
-      <AllowedMethod>POST</AllowedMethod>
-      <AllowedMethod>DELETE</AllowedMethod>
-      <AllowedMethod>GET</AllowedMethod>
-      <AllowedMethod>HEAD</AllowedMethod>
-      <MaxAgeSeconds>3000</MaxAgeSeconds>
-      <AllowedHeader>*</AllowedHeader>
-      <ExposeHeader>ETag</ExposeHeader>
-    </CORSRule>
+    <CORSConfiguration>
+      <CORSRule>
+        <AllowedOrigin>[your domain]</AllowedOrigin>
+        <AllowedMethod>PUT</AllowedMethod>
+        <AllowedMethod>POST</AllowedMethod>
+        <AllowedMethod>DELETE</AllowedMethod>
+        <AllowedMethod>GET</AllowedMethod>
+        <AllowedMethod>HEAD</AllowedMethod>
+        <MaxAgeSeconds>3000</MaxAgeSeconds>
+        <AllowedHeader>*</AllowedHeader>
+        <ExposeHeader>ETag</ExposeHeader>
+      </CORSRule>
+    </CORSConfiguration>
 
 The only thing that should be modified is the `<AllowedOrigin>` configuration. Everything
 else should be the way you see it.
