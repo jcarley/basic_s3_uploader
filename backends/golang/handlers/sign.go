@@ -4,13 +4,40 @@ import (
   "crypto/hmac"
   "crypto/sha1"
   "encoding/base64"
-  "github.com/mitchellh/goamz/aws"
   "log"
   "sort"
   "strings"
 )
 
+const debug = false
+
 var b64 = base64.StdEncoding
+
+type Auth struct {
+  AccessKey, SecretKey, Token string
+}
+
+// EnvAuth creates an Auth based on environment information.
+// The AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment
+// variables are used.
+func EnvAuth() (auth Auth, err error) {
+  auth.AccessKey = os.Getenv("AWS_ACCESS_KEY_ID")
+  if auth.AccessKey == "" {
+    auth.AccessKey = os.Getenv("AWS_ACCESS_KEY")
+  }
+
+  auth.SecretKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
+  if auth.SecretKey == "" {
+    auth.SecretKey = os.Getenv("AWS_SECRET_KEY")
+  }
+  if auth.AccessKey == "" {
+    err = errors.New("AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY not found in environment")
+  }
+  if auth.SecretKey == "" {
+    err = errors.New("AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY not found in environment")
+  }
+  return
+}
 
 // ----------------------------------------------------------------------------
 // S3 signing (http://goo.gl/G1LrK)
@@ -37,7 +64,7 @@ var s3ParamsToSign = map[string]bool{
   "response-content-encoding":    true,
 }
 
-func sign(auth aws.Auth, method, canonicalPath string, params, headers map[string][]string) {
+func sign(auth Auth, method, canonicalPath string, params, headers map[string][]string) {
   var md5, ctype, date, xamz string
   var xamzDate bool
   var sarray []string

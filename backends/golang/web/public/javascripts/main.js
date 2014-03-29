@@ -8,9 +8,9 @@ $(document).ready(function() {
     file = element.target.files[0];
 
     settings = {
-      bucket: "your-bucket-name",
-      awsAccessKey: "your-aws-access-key", 
-      key: "a-key-for-the-upload",
+      bucket: "FinishFirstSoftware_jcarley_public",
+      awsAccessKey: "AKIAJDJ6VPIC7FRAMMSQ",
+      key: "",
       signatureBackend: "",
       initSignaturePath: "/get_init_signature",
       remainingSignaturesPath: "/get_remaining_signatures",

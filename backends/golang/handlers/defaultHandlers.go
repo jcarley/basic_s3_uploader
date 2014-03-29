@@ -1,21 +1,33 @@
 package handlers
 
 import (
-  // "encoding/json"
+  "encoding/json"
   "github.com/gorilla/mux"
-  // "io"
-  // "io/ioutil"
   "net/http"
 )
+
+func marshal(item interface{}, w http.ResponseWriter) {
+  bytes, err := json.Marshal(item)
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusBadRequest)
+    return
+  }
+  w.Write(bytes)
+}
 
 func App(w http.ResponseWriter, r *http.Request) {
   http.ServeFile(w, r, "web/public/views/index.html")
 }
 
 func getInitSignature(w http.ResponseWriter, r *http.Request) {
-  // content_type :json
-  // hash = S3UploadRequest.new(:type => :init, :params => params).to_h
-  // hash.to_json
+  auth := EnvAuth()
+
+  values := r.URL.Query()
+  headers := r.Header
+  uploadRequest, _ := NewS3UploadRequest(auth, values, headers)
+  response := uploadRequest.UploadInitSignature()
+
+  marshal(response, w)
 }
 
 func getRemainingSignatures(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +35,6 @@ func getRemainingSignatures(w http.ResponseWriter, r *http.Request) {
 
 func Install(r *mux.Router) {
   r.HandleFunc("/", App)
-  // r.HandleFunc("/ws", WsHandler)
 
   r.HandleFunc("/get_init_signature", getInitSignature)
   r.HandleFunc("/get_remaining_signatures", getRemainingSignatures)
