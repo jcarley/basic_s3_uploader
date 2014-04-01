@@ -4,7 +4,9 @@ import (
   "crypto/hmac"
   "crypto/sha1"
   "encoding/base64"
+  "errors"
   "log"
+  "os"
   "sort"
   "strings"
 )

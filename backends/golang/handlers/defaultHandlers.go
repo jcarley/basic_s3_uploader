@@ -20,7 +20,7 @@ func App(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInitSignature(w http.ResponseWriter, r *http.Request) {
-  auth := EnvAuth()
+  auth, _ := EnvAuth()
 
   values := r.URL.Query()
   headers := r.Header
