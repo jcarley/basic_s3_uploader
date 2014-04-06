@@ -45,7 +45,6 @@ func getRemainingSignatures(w http.ResponseWriter, r *http.Request) {
   if err != nil {
     panic(err)
   }
-  fmt.Println(totalParts)
 
   chunksSignatures := make(map[string]*S3UploadResponse)
   for index := 0; index < totalParts; index++ {
@@ -56,7 +55,6 @@ func getRemainingSignatures(w http.ResponseWriter, r *http.Request) {
     values.Set("part_number", chunkNumber)
 
     request, _ := NewS3UploadRequest(auth, values, headers)
-    // chunk_signatures[chunk_number] = {:signature => request.signature, :date => request.date}
     chunksSignatures[chunkNumber] = request.UploadPartSignature()
   }
 
