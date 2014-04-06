@@ -22,7 +22,7 @@ func filter(w http.ResponseWriter, req *http.Request) {
 
 func main() {
   wd, _ := os.Getwd()
-  println("Working directory", wd)
+  println("Working directory:", wd)
 
   r = mux.NewRouter()
   handlers.Install(r)

@@ -2,8 +2,10 @@ package handlers
 
 import (
   "encoding/json"
+  "fmt"
   "github.com/gorilla/mux"
   "net/http"
+  "strconv"
 )
 
 func marshal(item interface{}, w http.ResponseWriter) {
@@ -31,6 +33,40 @@ func getInitSignature(w http.ResponseWriter, r *http.Request) {
 }
 
 func getRemainingSignatures(w http.ResponseWriter, r *http.Request) {
+  auth, _ := EnvAuth()
+
+  values := r.URL.Query()
+  headers := r.Header
+  uploadRequest, _ := NewS3UploadRequest(auth, values, headers)
+  listResponse := uploadRequest.UploadListSignature()
+  completeResponse := uploadRequest.UploadCompleteSignature()
+
+  totalParts, err := strconv.Atoi(values.Get("total_chunks"))
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(totalParts)
+
+  chunksSignatures := make(map[string]*S3UploadResponse)
+  for index := 0; index < totalParts; index++ {
+    fmt.Println(index)
+
+    chunkNumber := strconv.Itoa(index + 1)
+    values.Set("chunk", chunkNumber)
+    values.Set("part_number", chunkNumber)
+
+    request, _ := NewS3UploadRequest(auth, values, headers)
+    // chunk_signatures[chunk_number] = {:signature => request.signature, :date => request.date}
+    chunksSignatures[chunkNumber] = request.UploadPartSignature()
+  }
+
+  remainingSignature := RemainingSignature{
+    ListSignature:     listResponse,
+    CompleteSignature: completeResponse,
+    ChunkSignatures:   chunksSignatures,
+  }
+
+  marshal(&remainingSignature, w)
 }
 
 func Install(r *mux.Router) {

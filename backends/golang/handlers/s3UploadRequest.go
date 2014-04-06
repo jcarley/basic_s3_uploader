@@ -8,6 +8,12 @@ import (
   "time"
 )
 
+type RemainingSignature struct {
+  ListSignature     *S3UploadResponse            `json:"list_signature,omitempty"`
+  CompleteSignature *S3UploadResponse            `json:"complete_signature,omitempty"`
+  ChunkSignatures   map[string]*S3UploadResponse `json:"chunk_signatures,omitempty"`
+}
+
 type S3UploadResponse struct {
   Date       string `json:"date,omitempty"`
   UploadId   string `json:"upload_id,omitempty"`
@@ -29,13 +35,15 @@ type S3UploadRequest struct {
   Signature string
 }
 
-func NewS3UploadRequest(auth Auth, params, headers map[string][]string) (*S3UploadRequest, error) {
+func NewS3UploadRequest(auth Auth, params url.Values, headers http.Header) (*S3UploadRequest, error) {
   encrypted, _ := strconv.ParseBool(valueOf("encrypted", params))
   acl := valueOf("acl", params)
-  if valueOf("date", headers) == "" {
-    headers["Date"] = []string{time.Now().In(time.UTC).Format(time.RFC1123)}
-  }
+  headers.Set("Date", string(time.Now().In(time.UTC).Format(time.RFC1123)))
+  // if valueOf("date", headers) == "" {
+  // headers["Date"] = []
+  // }
   params["Expires"] = headers["Date"]
+  params.Set("Date", headers.Get("Date"))
 
   params = mapValue("chunk", "partNumber", params)
   params = mapValue("upload_id", "uploadId", params)
