@@ -23,3 +23,7 @@ format:
 test: deps
 	@echo "$(OK_COLOR)==> Testing s3lite...$(NO_COLOR)"
 	go test ./...
+
+live:
+	@go get github.com/pilu/fresh
+	@fresh
